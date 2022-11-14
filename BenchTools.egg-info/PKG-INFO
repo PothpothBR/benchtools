@@ -1,0 +1,9 @@
+Metadata-Version: 2.1
+Name: BenchTools
+Version: 1.0.0b0
+Summary: Is an simple bench tool.
+Home-page: https://github.com/PothpothBR/benchtools
+Author: Bruno Dalagnol
+Author-email: dalagnolbruno88@gmail.com
+License: MIT
+License-File: LICENSE

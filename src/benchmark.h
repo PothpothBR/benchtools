@@ -9,15 +9,13 @@
 extern "C" {
 #endif // __cplusplus
 
-typedef struct _FunctionTable {
-	PyObject** function;
-	const char **name;
-	int *average;
-	unsigned buffered;
-	unsigned size;
-}FunctionTable;
+#ifndef min
+#define min(a, b) (a < b)? a : b
+#endif
 
-static FunctionTable benchmarkTable = {0};
+#ifndef max
+#define max(a, b) (a > b)? a : b
+#endif
 
 void addBenchmarkFunction(PyObject*, const char*, int);
 void startBenchmark();

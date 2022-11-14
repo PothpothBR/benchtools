@@ -1,5 +1,5 @@
 from setuptools import setup, Extension
-ext = Extension('benchtools', sources=["main.c", "benchmark.c"])
+ext = Extension('benchtools', sources=["src/main.c", "src/benchmark.c"])
 setup(
       name="BenchTools",
       version="1.0.0-b0",

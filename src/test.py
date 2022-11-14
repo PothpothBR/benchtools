@@ -2,27 +2,27 @@ from benchtools import *
 
 def f1():
     for i in range(10000000):
-        22/22/22/22/22
+        x = 22/22/22/22/22
 
 def f2():
     for i in range(10000000):
-        22/22/22/22/22
+        x = 22/22/22/22/22
         
 def f3():
     for i in range(1000000000):
-        22/22/22/22/22
+        x = 22/22
         
 def f4():
     for i in range(100000):
-        22/22/22/22/22
+        x = 22/22/22/22/22
         
 def f5():
     for i in range(1000000):
-        22/22/22/22/22
+        x = 22/22/22/22/22
         
 def f6():
     for i in range(10000000):
-        22/22/22/22
+        x = 22/22/22/22
 
 set_bench(f1, "teste-1", 1)
 set_bench(f2, "teste-2", 1)
