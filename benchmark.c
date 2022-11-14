@@ -11,6 +11,15 @@
 extern "C" {
 #endif // __cplusplus
 
+// TODO list * -
+// * Geração de tabela dinamica
+// * Benchmarks medidos por tempo e ou clock
+// * Salvar resultado para arquivo
+// * Benchmarks de comparação
+//    * 1x1
+//    * 1xN
+//    * NxN
+
 void addBenchmarkFunction(PyObject* function, const char* name, int average){
 	if (benchmarkTable.buffered >= benchmarkTable.size) {
 		benchmarkTable.size += FUNCTION_STACK_INCREASE;
