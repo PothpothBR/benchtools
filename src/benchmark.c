@@ -11,39 +11,30 @@
 extern "C" {
 #endif // __cplusplus
 
-// TODO list * -
-// * Geração de tabela dinamica
-// * Benchmarks medidos por tempo e ou clock
-// * ao lado do tempo sinalizar o melhor tempo / a diferenca de tempo se, em comparação
-// * Salvar resultado para arquivo
-// * Benchmarks de comparação
-//    * 1x1
-//    * 1xN
-//    * NxN
-//    * #xN (aonde # é o melhor resultado obtido)
-
 typedef struct _FunctionTable {
-	PyObject** function;
-	const char **name;
-	int *average;
-	unsigned buffered;
-	unsigned size;
+	PyObject** function;  // function list
+	const char **name;    // alias names
+	int *average;         // average result list
+	unsigned buffered;    // size of stack filled
+	unsigned size;        // total stask size
 }FunctionTable;
 
+// StackTable
 static FunctionTable BenchTable = {0};
 
+// add a PyObject to stack
 void addBenchmarkFunction(PyObject* function, const char* name, int average){
 	if (BenchTable.buffered >= BenchTable.size) {
 		BenchTable.size += FUNCTION_STACK_INCREASE;
-		BenchTable.function = (PyObject**)PyMem_Realloc(
+		BenchTable.function = (PyObject**)realloc(
 			BenchTable.function,
 			BenchTable.size
 		);
-		BenchTable.name = (const char**)PyMem_Realloc(
+		BenchTable.name = (const char**)realloc(
 			BenchTable.name,
 			BenchTable.size
 		);
-		BenchTable.average = (int*)PyMem_Realloc(
+		BenchTable.average = (int*)realloc(
 			BenchTable.average,
 			BenchTable.size
 		);
@@ -53,7 +44,10 @@ void addBenchmarkFunction(PyObject* function, const char* name, int average){
 	BenchTable.average[BenchTable.buffered++] = average;
 }
 
-void startBenchmark() {
+// try to call all functions in stack catching clock execution results
+void startBenchmark(char log) {
+	if (!BenchTable.buffered) return;
+
 	long counter = clock(),
 		 minimum = LONG_MAX,
 		 maximum = 0,
@@ -61,12 +55,23 @@ void startBenchmark() {
 		 best_average = LONG_MAX,
 		 best_index = 0,
 		 total = 0;
+
 	PyObject* function;
 
+	FILE *log_file = NULL;
+
+	if (log) {
+		log_file = fopen("benchmark.log.csv", "w");
+		fprintf(log_file, ",nome,maximo,minimo,media\n");
+	}
+
 	printf("\n   #=====================#============#============#=============#\n");
-	  printf("  ||         nome        |   maximo   |   minimo   |    media    ||\n");
-	printf("  ||---------------------|------------|------------|-------------||\n");
+	printf(  "  ||         nome        |   maximo   |   minimo   |    media    ||\n");
+	printf(  "  ||---------------------|------------|------------|-------------||\n");
+
 	for (unsigned int i = 0; i < BenchTable.buffered; i++) {
+		if (!BenchTable.average[i]) continue;
+
 		function = BenchTable.function[i];
 		average = 0;
 		minimum = LONG_MAX;
@@ -89,6 +94,7 @@ void startBenchmark() {
 		}
 		total += average;
 
+		if (log) fprintf(log_file, "%i,\"%s\",%li,%li,%li\n", i, BenchTable.name[i], average, minimum, maximum);
 		printf("\r  ||%-21s|%12li|%12li|%13li||   \n", BenchTable.name[i], average, minimum, maximum);
 	}
 	printf("   #===============================================#=============#\n");
@@ -97,19 +103,28 @@ void startBenchmark() {
 	printf("  ||---------------------|------------|--------|-----------------||\n");
 	printf("  ||%-21s|%12li|%8li|%17li||\n", BenchTable.name[best_index], best_average, BenchTable.buffered, total);
 	printf("   #=====================#============#========#=================#\n");
+
+	if (log) fclose(log_file);
 }
 
+// Free the table, alow reuse the stack
 void freeBenchmark() {
 	for (unsigned int i = 0; i < BenchTable.buffered; i++) {
-		PyMem_Free(BenchTable.name[i]);
+		Py_DECREF(BenchTable.name[i]);
 		Py_DECREF(BenchTable.function[i]);
+		BenchTable.name[i] = NULL;
+		BenchTable.function[i] = NULL;
 	}
 	
-	PyMem_Free(BenchTable.name);
-	Py_DECREF(BenchTable.function);
-	PyMem_Free(BenchTable.average);
-	BenchTable.size = 0;
+	free(BenchTable.name);
+	free(BenchTable.function);
+	free(BenchTable.average);
+	BenchTable.name = NULL;
+	BenchTable.function = NULL;
+	BenchTable.average = NULL;
+
 	BenchTable.buffered = 0;
+	BenchTable.size = 0;
 }
 
 #ifdef __cplusplus

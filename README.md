@@ -1,2 +1,4 @@
 # benchtools
-Um pequeno projeto escrito em C, com porte modular para python. Realiza benchmarks com uso de funções.
+A small project written in C, with a modular port to python. Performs benchmarks using functions.
+
+[GitHub-BenchTools](https://github.com/PothpothBR/benchtools)

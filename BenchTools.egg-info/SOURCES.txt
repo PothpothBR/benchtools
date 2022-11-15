@@ -6,4 +6,5 @@ BenchTools.egg-info/SOURCES.txt
 BenchTools.egg-info/dependency_links.txt
 BenchTools.egg-info/top_level.txt
 src/benchmark.c
+src/benchmark.h
 src/main.c
