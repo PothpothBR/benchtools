@@ -28,7 +28,7 @@ static PyObject* BTBenchmarkFunctions(PyObject* self, PyObject* args){
     return Py_None;
 }
 
-static PyObject* py_free_functions(PyObject* self, PyObject* args){
+static PyObject* BTFreeFunctionTable(PyObject* self, PyObject* args){
 
     freeBenchmark();
 
@@ -39,7 +39,7 @@ static PyObject* py_free_functions(PyObject* self, PyObject* args){
 static PyMethodDef BenchToolsMethods[] = {
     {"set_bench", BTAddBenchFunction, METH_VARARGS, "Adiciona um callable para executar na rodada de benchmark"},
     {"bench_round", BTBenchmarkFunctions, METH_NOARGS, "executa a rodada de benchmark"},
-    {"clear_round", py_free_functions, METH_NOARGS, "executa a rodada de benchmark"},
+    {"clear_round", BTFreeFunctionTable, METH_NOARGS, "limpa a rodada de benchmark"},
     {NULL}
 };
 

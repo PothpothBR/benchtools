@@ -1,44 +1,48 @@
-from benchtools import *
+from benchtools import set_bench, bench_round, clear_round
+from unittest import TestCase, TestSuite, TextTestRunner
 
-def f1():
+def benchF():
     for i in range(10000000):
         x = 22/22/22/22/22
 
-def f2():
-    for i in range(10000000):
-        x = 22/22/22/22/22
-        
-def f3():
+def benchFHard():
     for i in range(1000000000):
-        x = 22/22
-        
-def f4():
-    for i in range(100000):
         x = 22/22/22/22/22
-        
-def f5():
-    for i in range(1000000):
-        x = 22/22/22/22/22
-        
-def f6():
-    for i in range(10000000):
-        x = 22/22/22/22
 
-set_bench(f1, "teste-1", 1)
-set_bench(f2, "teste-2", 1)
-#set_bench(f3, "teste-3", 1)
-set_bench(f4, "teste-4", 1)
-set_bench(f5, "teste-5", 1)
-set_bench(f6, "teste-6", 1)
-bench_round()
-clear_round()
-set_bench(f1, "teste-1", 1)
-set_bench(f2, "teste-2", 1)
-set_bench(f3, "teste-3", 1)
-set_bench(f4, "teste-4", 1)
-set_bench(f5, "teste-5", 1)
-set_bench(f6, "teste-6", 1)
-bench_round()
-clear_round()
+class TestBenchmark(TestCase):
+    
+    def testSetOne(self):
+        set_bench(benchF, "t-11", 1)
+        
+    def testSetAll(self):
+        set_bench(benchF, "testetesteteste-12", 1)
+        set_bench(benchF, "teste-14", 1)
+        set_bench(benchF, "teste-15", 1)
+        set_bench(benchF, "teste-16", 1)
+        
+    def testBench(self):
+        bench_round()
+    
+    def testClear(self):
+        clear_round()
+        
+    def testRebench(self):
+        set_bench(benchF, "teste-22", 1)
+        set_bench(benchFHard, "teste-24", 1)
+        set_bench(benchF, "teste-25", 1)
+        set_bench(benchF, "teste-26", 1)
+        bench_round()
+        clear_round()
 
-print("\n...\nfinsh test successful!")
+def suite():
+    suite = TestSuite()
+    suite.addTest(TestBenchmark('testSetOne'))
+    suite.addTest(TestBenchmark('testSetAll'))
+    suite.addTest(TestBenchmark('testBench'))
+    suite.addTest(TestBenchmark('testClear'))
+    suite.addTest(TestBenchmark('testRebench'))
+    return suite
+
+if __name__ == '__main__':
+    runner = TextTestRunner()
+    runner.run(suite())

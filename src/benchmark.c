@@ -58,21 +58,21 @@ void startBenchmark() {
 		 minimum = LONG_MAX,
 		 maximum = 0,
 		 average = 0,
+		 best_average = LONG_MAX,
+		 best_index = 0,
 		 total = 0;
 	PyObject* function;
 
-	printf("\nIniciando rodada de benchmark para %i execucoes\n", BenchTable.buffered);
-
-	printf("    #-----------------------------------------------------#\n");
-	printf("    |        nome       |  maximo  |  minimo  |   media   |\n");
-	printf("    |-----------------------------------------------------|\n");
+	printf("\n   #=====================#============#============#=============#\n");
+	  printf("  ||         nome        |   maximo   |   minimo   |    media    ||\n");
+	printf("  ||---------------------|------------|------------|-------------||\n");
 	for (unsigned int i = 0; i < BenchTable.buffered; i++) {
 		function = BenchTable.function[i];
 		average = 0;
 		minimum = LONG_MAX;
 		maximum = 0;
 		for (int e = 0; e < BenchTable.average[i]; e++) {
-			printf("\r    [%i/%i] [%s... [%i/%i]]",  i + 1,  BenchTable.buffered, BenchTable.name[i], e+1, BenchTable.average[i]);
+			printf("\r   Rodado [%i/%i] Executando \"%s\" Etapa [%i/%i]",  i + 1,  BenchTable.buffered, BenchTable.name[i], e+1, BenchTable.average[i]);
 			
 			counter = clock();
 			PyObject_CallObject(function, NULL);
@@ -82,16 +82,21 @@ void startBenchmark() {
 			minimum = min(minimum, counter);
 			maximum = max(maximum, counter);
 		}
-
 		average /= BenchTable.average[i];
+		if (average < best_average) {
+			best_average = average;
+			best_index = i;
+		}
 		total += average;
 
-		printf("\r    |%-19s|%10li|%10li|%11li|   \n", BenchTable.name[i], average, minimum, maximum);
+		printf("\r  ||%-21s|%12li|%12li|%13li||   \n", BenchTable.name[i], average, minimum, maximum);
 	}
-	printf("    |-----------------------------------------------------|\n");
-	printf("    | total | %-44li|\n", total);
-	printf("    #-----------------------------------------------------#\n");
-	printf("Finalizando rodada de benchmark\n");
+	printf("   #===============================================#=============#\n");
+	printf("   #=====================#============#========#=================#\n");
+	printf("  ||       melhor        |    media   | rodado |      total      ||\n");
+	printf("  ||---------------------|------------|--------|-----------------||\n");
+	printf("  ||%-21s|%12li|%8li|%17li||\n", BenchTable.name[best_index], best_average, BenchTable.buffered, total);
+	printf("   #=====================#============#========#=================#\n");
 }
 
 void freeBenchmark() {
