@@ -1,11 +1,15 @@
 Metadata-Version: 2.1
 Name: BenchTools
-Version: 1.0.3.post2
+Version: 1.0.3.post3
 Summary: Is an simple bench tool.
 Home-page: https://github.com/PothpothBR/benchtools
 Author: Bruno Dalagnol
 Author-email: dalagnolbruno88@gmail.com
 License: MIT
+Keywords: benchmark,optimization,bench tools,benchmark tool
+Platform: Windows
+Platform: Linux
+Requires-Python: >=3.0
 Description-Content-Type: text/markdown
 License-File: LICENSE
 
@@ -13,6 +17,7 @@ License-File: LICENSE
 A small project written in C, with a modular port to python. Performs benchmarks using functions.
 
 [GitHub-BenchTools](https://github.com/PothpothBR/benchtools)
+
 [GitHub-Issues](https://github.com/PothpothBR/benchtools/issues)
 
 # Use example:

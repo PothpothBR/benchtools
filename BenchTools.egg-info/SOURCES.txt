@@ -8,3 +8,4 @@ BenchTools.egg-info/top_level.txt
 src/benchmark.c
 src/benchmark.h
 src/main.c
+test/test.py
